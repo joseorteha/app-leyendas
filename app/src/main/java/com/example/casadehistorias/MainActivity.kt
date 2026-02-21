@@ -7,7 +7,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.ui.Modifier
-import com.example.casadehistorias.ui.navigation.NavGraph
+import com.example.casadehistorias.ui.MainContainer
 import com.example.casadehistorias.ui.theme.CasaDeHistoriasTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -20,7 +20,10 @@ class MainActivity : ComponentActivity() {
         setContent {
             CasaDeHistoriasTheme {
                 Surface(modifier = Modifier.fillMaxSize()) {
-                    NavGraph(navController = androidx.navigation.compose.rememberNavController())
+                    // Ahora el onLogout se maneja internamente en el MainContainer
+                    MainContainer(onLogout = {
+                        // Opcional: podrías poner lógica extra aquí
+                    })
                 }
             }
         }
