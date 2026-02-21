@@ -13,6 +13,7 @@ import com.example.casadehistorias.ui.auth.SignUpScreen
 import com.example.casadehistorias.ui.story.AddStoryScreen
 import com.example.casadehistorias.ui.story.StoryDetailScreen
 import com.example.casadehistorias.ui.story.StoryListScreen
+import com.example.casadehistorias.ui.story.StoryMapScreen
 import com.example.casadehistorias.ui.story.StoryViewModel
 import com.example.casadehistorias.ui.welcome.WelcomeScreen
 
@@ -22,6 +23,7 @@ sealed class Screen(val route: String) {
     object SignUp : Screen("signup")
     object StoryList : Screen("story_list")
     object AddStory : Screen("add_story")
+    object StoryMap : Screen("story_map")
     object StoryDetail : Screen("story_detail/{storyId}") {
         fun createRoute(storyId: String) = "story_detail/$storyId"
     }
@@ -89,6 +91,16 @@ fun NavGraph(
         composable(Screen.AddStory.route) {
             AddStoryScreen(
                 onNavigateBack = { navController.popBackStack() }
+            )
+        }
+
+        composable(Screen.StoryMap.route) {
+            val viewModel: StoryViewModel = hiltViewModel()
+            StoryMapScreen(
+                viewModel = viewModel,
+                onStoryClick = { storyId ->
+                    navController.navigate(Screen.StoryDetail.createRoute(storyId))
+                }
             )
         }
 
