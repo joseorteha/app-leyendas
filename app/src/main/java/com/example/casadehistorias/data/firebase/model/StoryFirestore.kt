@@ -16,9 +16,11 @@ data class StoryFirestore(
     val community: String = "",
     val createdAt: Timestamp = Timestamp.now(),
     val updatedAt: Timestamp = Timestamp.now(),
-    var published: Boolean = true, // Nombre exacto como en tu Firebase
+    var published: Boolean = true,
     val authorId: String = "",
-    val tags: List<String> = emptyList()
+    val tags: List<String> = emptyList(),
+    val latitude: Double? = null,
+    val longitude: Double? = null
 ) {
     constructor() : this(
         id = "",
@@ -34,6 +36,8 @@ data class StoryFirestore(
         updatedAt = Timestamp.now(),
         published = true,
         authorId = "",
-        tags = emptyList()
+        tags = emptyList(),
+        latitude = null,
+        longitude = null
     )
 }
