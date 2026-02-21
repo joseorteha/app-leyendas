@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "729347267782",
+    "project_id": "casa-de-historias",
+    "storage_bucket": "casa-de-historias.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:729347267782:android:ba609d00e1ddf3ffa78bc7",
+        "android_client_info": {
+          "package_name": "com.example.casadehistorias"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAAwXUmaQRQyeOguE8WsCtYXAtEoCDZNuY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
