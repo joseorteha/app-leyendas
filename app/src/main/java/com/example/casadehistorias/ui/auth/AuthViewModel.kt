@@ -23,6 +23,9 @@ class AuthViewModel @Inject constructor(
     private val _userProfile = MutableStateFlow<UserProfile?>(null)
     val userProfile: StateFlow<UserProfile?> = _userProfile.asStateFlow()
 
+    // Check if user is already logged in (for determining start destination)
+    val isLoggedIn: Boolean get() = authRepository.currentUser != null
+
     init {
         viewModelScope.launch {
             authRepository.authState.collect { user ->
@@ -42,26 +45,44 @@ class AuthViewModel @Inject constructor(
             _authState.value = AuthState.Loading
             val result = authRepository.signInWithEmailAndPassword(email, password)
             if (result.isFailure) {
-                _authState.value = AuthState.Error(result.exceptionOrNull()?.message ?: "Error desconocido")
+                _authState.value = AuthState.Error(
+                    result.exceptionOrNull()?.message ?: "Error desconocido"
+                )
             }
-            // El estado exitoso se maneja automáticamente en el init{}
         }
     }
 
     fun signUp(email: String, password: String, displayName: String, community: String) {
         viewModelScope.launch {
             _authState.value = AuthState.Loading
-            val result = authRepository.createUserWithEmailAndPassword(email, password, displayName, community)
+            val result = authRepository.createUserWithEmailAndPassword(
+                email, password, displayName, community
+            )
             if (result.isFailure) {
-                _authState.value = AuthState.Error(result.exceptionOrNull()?.message ?: "Error desconocido")
+                _authState.value = AuthState.Error(
+                    result.exceptionOrNull()?.message ?: "Error desconocido"
+                )
             }
-            // El estado exitoso se maneja automáticamente en el init{}
         }
     }
 
     fun signOut() {
         viewModelScope.launch {
             authRepository.signOut()
+        }
+    }
+
+    fun updateProfile(displayName: String, community: String) {
+        viewModelScope.launch {
+            val user = authRepository.currentUser ?: return@launch
+            val currentProfile = _userProfile.value ?: return@launch
+            val updated = currentProfile.copy(
+                displayName = displayName,
+                community = community
+            )
+            if (authRepository.updateUserProfile(user.uid, updated)) {
+                _userProfile.value = updated
+            }
         }
     }
 

@@ -16,28 +16,9 @@ data class StoryFirestore(
     val community: String = "",
     val createdAt: Timestamp = Timestamp.now(),
     val updatedAt: Timestamp = Timestamp.now(),
-    var published: Boolean = true,
+    val published: Boolean = true,
     val authorId: String = "",
     val tags: List<String> = emptyList(),
     val latitude: Double? = null,
     val longitude: Double? = null
-) {
-    constructor() : this(
-        id = "",
-        titleEs = "",
-        titleNahuatl = "",
-        contentEs = "",
-        contentNahuatl = "",
-        audioUrl = null,
-        imageUrl = null,
-        narratorName = "",
-        community = "",
-        createdAt = Timestamp.now(),
-        updatedAt = Timestamp.now(),
-        published = true,
-        authorId = "",
-        tags = emptyList(),
-        latitude = null,
-        longitude = null
-    )
-}
+)

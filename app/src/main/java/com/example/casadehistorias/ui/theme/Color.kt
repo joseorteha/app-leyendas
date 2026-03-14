@@ -7,27 +7,25 @@ import androidx.compose.ui.graphics.Color
  * Colores que evocan una noche de leyendas en la Sierra de Zongolica
  */
 
-// 🌑 Fondo: Azul Noche Profunda - Como el cielo estrellado de la sierra
-val NocheProfunda = Color(0xFF152b4b)
+// 🌑 Fondo: Azul Noche Profunda (Modernizado, Slate 900)
+val NocheProfunda = Color(0xFF0F172A)
 
-// 💧 Primario: Turquesa Brillante - Como el agua sagrada de los manantiales
-val AguaSagrada = Color(0xFF00bcd4)
+// 💧 Primario: Turquesa Brillante (Cyan vibrante)
+val AguaSagrada = Color(0xFF06B6D4)
+val AguaSagradaOscura = Color(0xFF0891B2)
 
-// ❤️ Acento: Rojo Intenso - Como las flores ceremoniales
-val FloresCeremoniales = Color(0xFFFF5252)
+// ❤️ Acento: Rojo/Coral Intenso (Rose vibrante)
+val FloresCeremoniales = Color(0xFFF43F5E)
+val FloresCeremonialesOscuras = Color(0xFFE11D48)
 
-// 📄 Texto: Blanco puro - Como la luna llena que ilumina las historias
-val LunaLlena = Color(0xFFFFFFFF)
+// 📄 Texto
+val LunaLlena = Color(0xFFF8FAFC)
+val TextoSecundario = Color(0xFF94A3B8)
 
-// Variaciones para diferentes estados
-val AguaSagradaOscura = Color(0xFF00838f)
-val FloresCeremonialesOscuras = Color(0xFFc62828)
-val TextoSecundario = Color(0xFFB0BEC5)
-val FondoTarjeta = Color(0xFF1e3a5f)
+// Superficies (Glassmorphism ready)
+val FondoTarjeta = Color(0xCC1E293B) // Con un poco de transparencia
+val SurfaceVariant = Color(0xFF334155)
 
-// Colores adicionales compatibles
-val BlueNight = Color(0xFF152B4B)
-val Turquesa = Color(0xFF00BCD4)
-val RedFlores = Color(0xFFFF5252)
-val SurfaceBlue = Color(0xFF1F3B63)
-val WhitePure = Color(0xFFFFFFFF)
+// Extras
+val SuccessGreen = Color(0xFF4CAF50)
+val WarningOrange = Color(0xFFFFA726)

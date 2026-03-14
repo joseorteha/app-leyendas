@@ -10,6 +10,9 @@ data class Story(
     val imageUrl: String?,
     val narratorName: String,
     val community: String,
-    val latitude: Double? = null,  // Ubicación opcional
-    val longitude: Double? = null  // Ubicación opcional
+    val latitude: Double? = null,
+    val longitude: Double? = null,
+    val authorId: String = "",
+    val tags: List<String> = emptyList(),
+    val createdAt: Long = 0L
 )

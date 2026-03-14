@@ -18,7 +18,7 @@ class FirestoreRepository @Inject constructor(
 
     fun getAllStoriesFlow(): Flow<List<StoryFirestore>> = callbackFlow {
         val listener = firestore.collection("stories")
-            .whereEqualTo("published", true) // Cambiado: antes decía 'isPublished'
+            .whereEqualTo("published", true)
             .orderBy("createdAt", Query.Direction.DESCENDING)
             .addSnapshotListener { snapshot, error ->
                 if (error != null) {
@@ -39,7 +39,7 @@ class FirestoreRepository @Inject constructor(
     suspend fun getAllStories(): List<StoryFirestore> {
         return try {
             val snapshot = firestore.collection("stories")
-                .whereEqualTo("published", true) // Cambiado: antes decía 'isPublished'
+                .whereEqualTo("published", true)
                 .orderBy("createdAt", Query.Direction.DESCENDING)
                 .get()
                 .await()
@@ -61,11 +61,11 @@ class FirestoreRepository @Inject constructor(
         }
     }
 
-    suspend fun getStoriesByCommmunity(community: String): List<StoryFirestore> {
+    suspend fun getStoriesByCommunity(community: String): List<StoryFirestore> {
         return try {
             val snapshot = firestore.collection("stories")
                 .whereEqualTo("community", community)
-                .whereEqualTo("published", true) // Cambiado
+                .whereEqualTo("published", true)
                 .orderBy("createdAt", Query.Direction.DESCENDING)
                 .get()
                 .await()
@@ -75,6 +75,43 @@ class FirestoreRepository @Inject constructor(
             }
         } catch (e: Exception) {
             emptyList()
+        }
+    }
+
+    suspend fun getStoriesByAuthor(authorId: String): List<StoryFirestore> {
+        return try {
+            val snapshot = firestore.collection("stories")
+                .whereEqualTo("authorId", authorId)
+                .orderBy("createdAt", Query.Direction.DESCENDING)
+                .get()
+                .await()
+
+            snapshot.documents.mapNotNull { doc ->
+                doc.toObject(StoryFirestore::class.java)
+            }
+        } catch (e: Exception) {
+            emptyList()
+        }
+    }
+
+    suspend fun getStoriesByIds(ids: List<String>): List<StoryFirestore> {
+        if (ids.isEmpty()) return emptyList()
+        return try {
+            // Firestore 'in' queries support max 30 items
+            val results = mutableListOf<StoryFirestore>()
+            ids.chunked(30).forEach { chunk ->
+                val snapshot = firestore.collection("stories")
+                    .whereIn("__name__", chunk.map { firestore.collection("stories").document(it) })
+                    .get()
+                    .await()
+                results.addAll(snapshot.documents.mapNotNull { doc ->
+                    doc.toObject(StoryFirestore::class.java)
+                })
+            }
+            results
+        } catch (e: Exception) {
+            // Fallback: fetch one by one
+            ids.mapNotNull { getStoryById(it) }
         }
     }
 
@@ -116,16 +153,23 @@ class FirestoreRepository @Inject constructor(
 
     suspend fun searchStories(query: String): List<StoryFirestore> {
         return try {
+            // Fetch all published stories and filter locally for more flexible search
             val snapshot = firestore.collection("stories")
-                .whereEqualTo("published", true) // Cambiado
-                .orderBy("titleEs")
-                .startAt(query)
-                .endAt(query + "\uf8ff")
+                .whereEqualTo("published", true)
                 .get()
                 .await()
 
-            snapshot.documents.mapNotNull { doc ->
+            val allStories = snapshot.documents.mapNotNull { doc ->
                 doc.toObject(StoryFirestore::class.java)
+            }
+
+            val lowerQuery = query.lowercase()
+            allStories.filter { story ->
+                story.titleEs.lowercase().contains(lowerQuery) ||
+                story.titleNahuatl.lowercase().contains(lowerQuery) ||
+                story.narratorName.lowercase().contains(lowerQuery) ||
+                story.community.lowercase().contains(lowerQuery) ||
+                story.tags.any { it.lowercase().contains(lowerQuery) }
             }
         } catch (e: Exception) {
             emptyList()

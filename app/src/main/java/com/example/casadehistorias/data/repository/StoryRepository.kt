@@ -15,13 +15,11 @@ class StoryRepository @Inject constructor(
     private val authRepository: AuthRepository
 ) {
 
-    // Obtener todas las historias como Flow (en tiempo real)
-    fun getAllStoriesFlow(): Flow<List<Story>> = 
+    fun getAllStoriesFlow(): Flow<List<Story>> =
         firestoreRepository.getAllStoriesFlow().map { stories ->
             stories.map { it.toDomainModel() }
         }
 
-    // Obtener todas las historias (una sola vez)
     suspend fun getAllStories(): List<Story> {
         return firestoreRepository.getAllStories().map { it.toDomainModel() }
     }
@@ -30,8 +28,21 @@ class StoryRepository @Inject constructor(
         return firestoreRepository.getStoryById(id)?.toDomainModel()
     }
 
-    suspend fun getStoriesByCommmunity(community: String): List<Story> {
-        return firestoreRepository.getStoriesByCommmunity(community).map { it.toDomainModel() }
+    suspend fun getStoriesByCommunity(community: String): List<Story> {
+        return firestoreRepository.getStoriesByCommunity(community).map { it.toDomainModel() }
+    }
+
+    suspend fun getStoriesByAuthor(authorId: String): List<Story> {
+        return firestoreRepository.getStoriesByAuthor(authorId).map { it.toDomainModel() }
+    }
+
+    suspend fun getMyStories(): List<Story> {
+        val currentUser = authRepository.currentUser ?: return emptyList()
+        return getStoriesByAuthor(currentUser.uid)
+    }
+
+    suspend fun getStoriesByIds(ids: List<String>): List<Story> {
+        return firestoreRepository.getStoriesByIds(ids).map { it.toDomainModel() }
     }
 
     suspend fun searchStories(query: String): List<Story> {
@@ -58,7 +69,6 @@ class StoryRepository @Inject constructor(
         return firestoreRepository.deleteStory(storyId)
     }
 
-    // Manejo de favoritos
     suspend fun addToFavorites(storyId: String): Boolean {
         val currentUser = authRepository.currentUser
         return if (currentUser != null) {
@@ -74,7 +84,7 @@ class StoryRepository @Inject constructor(
     }
 }
 
-// Extension functions para convertir entre modelos
+// Extension functions for converting between models
 private fun StoryFirestore.toDomainModel(): Story {
     return Story(
         id = this.id,
@@ -85,7 +95,12 @@ private fun StoryFirestore.toDomainModel(): Story {
         audioUrl = this.audioUrl,
         imageUrl = this.imageUrl,
         narratorName = this.narratorName,
-        community = this.community
+        community = this.community,
+        latitude = this.latitude,
+        longitude = this.longitude,
+        authorId = this.authorId,
+        tags = this.tags,
+        createdAt = this.createdAt.seconds * 1000
     )
 }
 
@@ -101,6 +116,9 @@ private fun Story.toFirestoreModel(authorId: String): StoryFirestore {
         narratorName = this.narratorName,
         community = this.community,
         authorId = authorId,
-        published  = true
+        published = true,
+        latitude = this.latitude,
+        longitude = this.longitude,
+        tags = this.tags
     )
 }

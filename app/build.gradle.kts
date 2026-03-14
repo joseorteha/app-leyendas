@@ -23,7 +23,7 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -43,7 +43,7 @@ android {
 }
 
 dependencies {
-    // CORREGIDO: Usamos puntos en lugar de guiones
+    // Core Android
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -52,6 +52,7 @@ dependencies {
     implementation(libs.androidx.compose.ui.graphics)
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.compose.material.icons.extended)
     implementation(libs.androidx.navigation.compose)
 
     // Firebase
@@ -61,9 +62,17 @@ dependencies {
     implementation(libs.firebase.auth)
     implementation(libs.firebase.storage)
 
-    // Maps
-    implementation(libs.maps.compose)
-    implementation(libs.play.services.maps)
+    // MapLibre (replaces Google Maps)
+    implementation(libs.maplibre.android)
+
+    // Coil (image loading)
+    implementation(libs.coil.compose)
+    implementation(libs.coil.network)
+
+    // Media3 / ExoPlayer (audio playback)
+    implementation(libs.media3.exoplayer)
+    implementation(libs.media3.ui)
+    implementation(libs.media3.session)
 
     // Room
     implementation(libs.androidx.room.runtime)

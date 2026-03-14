@@ -13,17 +13,14 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             CasaDeHistoriasTheme {
                 Surface(modifier = Modifier.fillMaxSize()) {
-                    // Ahora el onLogout se maneja internamente en el MainContainer
-                    MainContainer(onLogout = {
-                        // Opcional: podrías poner lógica extra aquí
-                    })
+                    MainContainer()
                 }
             }
         }

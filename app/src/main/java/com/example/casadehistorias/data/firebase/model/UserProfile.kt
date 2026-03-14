@@ -9,22 +9,9 @@ data class UserProfile(
     val email: String = "",
     val displayName: String = "",
     val photoUrl: String? = null,
-    val community: String = "", // Comunidad de origen
-    val isStoryteller: Boolean = false, // Si puede subir historias
-    val favoriteStories: List<String> = emptyList(), // IDs de historias favoritas
+    val community: String = "",
+    val isStoryteller: Boolean = false,
+    val favoriteStories: List<String> = emptyList(),
     val createdAt: Timestamp = Timestamp.now(),
     val lastLogin: Timestamp = Timestamp.now()
-) {
-    // Constructor vacío requerido por Firestore
-    constructor() : this(
-        id = "",
-        email = "",
-        displayName = "",
-        photoUrl = null,
-        community = "",
-        isStoryteller = false,
-        favoriteStories = emptyList(),
-        createdAt = Timestamp.now(),
-        lastLogin = Timestamp.now()
-    )
-}
+)
